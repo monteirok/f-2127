@@ -66,7 +66,6 @@ const InquiryResponseModal = ({
 
       console.log("Email response:", data);
 
-      // Update inquiry status to 'responded' instead of 'approved'
       onRespond(inquiry.id, "responded", response);
       
       toast({
@@ -85,6 +84,15 @@ const InquiryResponseModal = ({
     } finally {
       setIsSending(false);
     }
+  };
+
+  const handleIgnore = () => {
+    onRespond(inquiry.id, "ignored", "Inquiry ignored");
+    toast({
+      title: "Success",
+      description: "Inquiry marked as ignored",
+    });
+    onClose();
   };
 
   return (
@@ -125,10 +133,18 @@ const InquiryResponseModal = ({
             />
           </div>
         </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
-            Cancel
-          </Button>
+        <DialogFooter className="flex justify-between">
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button 
+              variant="destructive"
+              onClick={handleIgnore}
+            >
+              Ignore Inquiry
+            </Button>
+          </div>
           <Button 
             onClick={handleSubmit}
             disabled={isSending}
