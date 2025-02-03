@@ -30,7 +30,7 @@ const Inquiries = ({ inquiries, onRespond }: InquiriesProps) => {
       <ScrollArea className="h-[600px] w-full">
         <Table>
           <TableHeader>
-            <TableRow className="hover:bg-muted/50">
+            <TableRow className="hover:bg-muted/50 dark:hover:bg-muted/10">
               <TableHead className="font-semibold">Date</TableHead>
               <TableHead className="font-semibold">Name</TableHead>
               <TableHead className="font-semibold">Status</TableHead>
@@ -41,7 +41,10 @@ const Inquiries = ({ inquiries, onRespond }: InquiriesProps) => {
             {inquiriesList.map((inquiry) => (
               <TableRow 
                 key={inquiry.id}
-                className={`hover:bg-muted/50 transition-colors ${inquiry.status === 'responded' ? 'bg-green-50' : ''}`}
+                className={`
+                  hover:bg-muted/50 dark:hover:bg-muted/10 transition-colors
+                  ${inquiry.status === 'responded' ? 'bg-green-50/50 dark:bg-green-900/20' : ''}
+                `}
               >
                 <TableCell className="font-medium">
                   {format(new Date(inquiry.created_at), 'MMM d, yyyy')}
