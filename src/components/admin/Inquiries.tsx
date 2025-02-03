@@ -18,7 +18,7 @@ const Inquiries = ({ inquiries, onRespond }: InquiriesProps) => {
 
   const openInquiries = inquiries.filter(inquiry => inquiry.status === 'pending');
   const closedInquiries = inquiries.filter(inquiry => 
-    inquiry.status === 'responded' || inquiry.status === 'ignored'
+    inquiry.status === 'approved' || inquiry.status === 'rejected'
   );
 
   const renderInquiriesTable = (inquiriesList: any[]) => {
@@ -44,8 +44,8 @@ const Inquiries = ({ inquiries, onRespond }: InquiriesProps) => {
               <TableRow 
                 key={inquiry.id}
                 className={`hover:bg-muted/50 transition-colors ${
-                  inquiry.status === 'responded' ? 'bg-green-50' : 
-                  inquiry.status === 'ignored' ? 'bg-red-50' : ''
+                  inquiry.status === 'approved' ? 'bg-green-50' : 
+                  inquiry.status === 'rejected' ? 'bg-red-50' : ''
                 }`}
               >
                 <TableCell className="font-medium">

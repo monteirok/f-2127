@@ -49,7 +49,6 @@ const InquiryResponseModal = ({
         responseMessage: response,
       });
 
-      // Send email
       const { data, error: emailError } = await supabase.functions.invoke("send-inquiry-response", {
         body: {
           inquiryId: inquiry.id,
@@ -66,7 +65,7 @@ const InquiryResponseModal = ({
 
       console.log("Email response:", data);
 
-      onRespond(inquiry.id, "responded", response);
+      onRespond(inquiry.id, "approved", response);
       
       toast({
         title: "Success",
@@ -87,10 +86,10 @@ const InquiryResponseModal = ({
   };
 
   const handleIgnore = () => {
-    onRespond(inquiry.id, "ignored", "Inquiry ignored");
+    onRespond(inquiry.id, "rejected", "Inquiry rejected");
     toast({
       title: "Success",
-      description: "Inquiry marked as ignored",
+      description: "Inquiry marked as rejected",
     });
     onClose();
   };
