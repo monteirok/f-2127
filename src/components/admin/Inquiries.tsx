@@ -1,11 +1,7 @@
 import { useState } from "react";
-import { format } from "date-fns";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import StatusBadge from "./StatusBadge";
+import InquiriesTable from "./InquiriesTable";
 import InquiryResponseModal from "./InquiryResponseModal";
 
 interface InquiriesProps {
@@ -25,69 +21,6 @@ const Inquiries = ({ inquiries, onRespond }: InquiriesProps) => {
     onRespond(inquiryId, 'ignored', 'Inquiry ignored by admin');
   };
 
-  const renderInquiriesTable = (inquiriesList: any[]) => {
-    if (!inquiriesList || inquiriesList.length === 0) {
-      return (
-        <p className="text-center text-muted-foreground py-8">No inquiries found.</p>
-      );
-    }
-
-    return (
-      <ScrollArea className="h-[600px] w-full">
-        <Table>
-          <TableHeader>
-            <TableRow className="hover:bg-muted/50 dark:hover:bg-muted/10">
-              <TableHead className="font-semibold">Date</TableHead>
-              <TableHead className="font-semibold">Name</TableHead>
-              <TableHead className="font-semibold">Status</TableHead>
-              <TableHead className="font-semibold">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {inquiriesList.map((inquiry) => (
-              <TableRow 
-                key={inquiry.id}
-                className={`
-                  hover:bg-muted/50 dark:hover:bg-muted/10 transition-colors
-                  ${inquiry.status === 'responded' ? 'bg-green-50/50 dark:bg-green-900/20' : ''}
-                  ${inquiry.status === 'ignored' ? 'bg-red-50/50 dark:bg-red-900/20' : ''}
-                `}
-              >
-                <TableCell className="font-medium">
-                  {format(new Date(inquiry.created_at), 'MMM d, yyyy')}
-                </TableCell>
-                <TableCell>{inquiry.name}</TableCell>
-                <TableCell><StatusBadge status={inquiry.status} /></TableCell>
-                <TableCell>
-                  {inquiry.status === 'pending' && (
-                    <div className="flex gap-2">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="hover:bg-green-500 hover:text-white transition-colors"
-                        onClick={() => setSelectedInquiry(inquiry)}
-                      >
-                        Respond
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="hover:bg-red-500 hover:text-white transition-colors"
-                        onClick={() => handleIgnore(inquiry.id)}
-                      >
-                        Ignore
-                      </Button>
-                    </div>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </ScrollArea>
-    );
-  };
-
   return (
     <Card className="bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <CardHeader>
@@ -100,10 +33,18 @@ const Inquiries = ({ inquiries, onRespond }: InquiriesProps) => {
             <TabsTrigger value="closed">Closed Inquiries ({closedInquiries.length})</TabsTrigger>
           </TabsList>
           <TabsContent value="open">
-            {renderInquiriesTable(openInquiries)}
+            <InquiriesTable
+              inquiries={openInquiries}
+              onRespond={setSelectedInquiry}
+              onIgnore={handleIgnore}
+            />
           </TabsContent>
           <TabsContent value="closed">
-            {renderInquiriesTable(closedInquiries)}
+            <InquiriesTable
+              inquiries={closedInquiries}
+              onRespond={setSelectedInquiry}
+              onIgnore={handleIgnore}
+            />
           </TabsContent>
         </Tabs>
       </CardContent>
