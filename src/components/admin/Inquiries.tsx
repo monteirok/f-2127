@@ -17,7 +17,7 @@ const Inquiries = ({ inquiries, onRespond }: InquiriesProps) => {
   const [selectedInquiry, setSelectedInquiry] = useState<any>(null);
 
   const openInquiries = inquiries.filter(inquiry => inquiry.status === 'pending');
-  const closedInquiries = inquiries.filter(inquiry => inquiry.status === 'responded');
+  const closedInquiries = inquiries.filter(inquiry => inquiry.status === 'approved');
 
   const renderInquiriesTable = (inquiriesList: any[]) => {
     if (!inquiriesList || inquiriesList.length === 0) {
@@ -41,7 +41,7 @@ const Inquiries = ({ inquiries, onRespond }: InquiriesProps) => {
             {inquiriesList.map((inquiry) => (
               <TableRow 
                 key={inquiry.id}
-                className={`hover:bg-muted/50 transition-colors ${inquiry.status === 'responded' ? 'bg-green-50' : ''}`}
+                className={`hover:bg-muted/50 transition-colors ${inquiry.status === 'approved' ? 'bg-green-50' : ''}`}
               >
                 <TableCell className="font-medium">
                   {format(new Date(inquiry.created_at), 'MMM d, yyyy')}
