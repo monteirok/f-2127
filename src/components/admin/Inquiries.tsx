@@ -17,7 +17,13 @@ const Inquiries = ({ inquiries, onRespond }: InquiriesProps) => {
   const [selectedInquiry, setSelectedInquiry] = useState<any>(null);
 
   const openInquiries = inquiries.filter(inquiry => inquiry.status === 'pending');
-  const closedInquiries = inquiries.filter(inquiry => inquiry.status === 'responded');
+  const closedInquiries = inquiries.filter(inquiry => 
+    ['responded', 'ignored'].includes(inquiry.status || '')
+  );
+
+  const handleIgnore = (inquiryId: string) => {
+    onRespond(inquiryId, 'ignored', 'Inquiry ignored by admin');
+  };
 
   const renderInquiriesTable = (inquiriesList: any[]) => {
     if (!inquiriesList || inquiriesList.length === 0) {
@@ -44,6 +50,7 @@ const Inquiries = ({ inquiries, onRespond }: InquiriesProps) => {
                 className={`
                   hover:bg-muted/50 dark:hover:bg-muted/10 transition-colors
                   ${inquiry.status === 'responded' ? 'bg-green-50/50 dark:bg-green-900/20' : ''}
+                  ${inquiry.status === 'ignored' ? 'bg-red-50/50 dark:bg-red-900/20' : ''}
                 `}
               >
                 <TableCell className="font-medium">
@@ -53,14 +60,24 @@ const Inquiries = ({ inquiries, onRespond }: InquiriesProps) => {
                 <TableCell><StatusBadge status={inquiry.status} /></TableCell>
                 <TableCell>
                   {inquiry.status === 'pending' && (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="hover:bg-green-500 hover:text-white transition-colors"
-                      onClick={() => setSelectedInquiry(inquiry)}
-                    >
-                      Respond
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="hover:bg-green-500 hover:text-white transition-colors"
+                        onClick={() => setSelectedInquiry(inquiry)}
+                      >
+                        Respond
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="hover:bg-red-500 hover:text-white transition-colors"
+                        onClick={() => handleIgnore(inquiry.id)}
+                      >
+                        Ignore
+                      </Button>
+                    </div>
                   )}
                 </TableCell>
               </TableRow>
