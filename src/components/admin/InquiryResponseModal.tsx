@@ -66,7 +66,7 @@ const InquiryResponseModal = ({
 
       console.log("Email response:", data);
 
-      // Update inquiry status
+      // Update inquiry status to 'responded' instead of 'approved'
       onRespond(inquiry.id, "responded", response);
       
       toast({
