@@ -49,6 +49,7 @@ const InquiryResponseModal = ({
         responseMessage: response,
       });
 
+      // Send email
       const { data, error: emailError } = await supabase.functions.invoke("send-inquiry-response", {
         body: {
           inquiryId: inquiry.id,
@@ -65,7 +66,8 @@ const InquiryResponseModal = ({
 
       console.log("Email response:", data);
 
-      onRespond(inquiry.id, "approved", response);
+      // Update inquiry status to 'responded' instead of 'approved'
+      onRespond(inquiry.id, "responded", response);
       
       toast({
         title: "Success",
@@ -83,15 +85,6 @@ const InquiryResponseModal = ({
     } finally {
       setIsSending(false);
     }
-  };
-
-  const handleIgnore = () => {
-    onRespond(inquiry.id, "rejected", "Inquiry rejected");
-    toast({
-      title: "Success",
-      description: "Inquiry marked as rejected",
-    });
-    onClose();
   };
 
   return (
@@ -132,18 +125,10 @@ const InquiryResponseModal = ({
             />
           </div>
         </div>
-        <DialogFooter className="flex justify-between">
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={onClose}>
-              Cancel
-            </Button>
-            <Button 
-              variant="destructive"
-              onClick={handleIgnore}
-            >
-              Ignore Inquiry
-            </Button>
-          </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
           <Button 
             onClick={handleSubmit}
             disabled={isSending}
